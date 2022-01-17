@@ -4,7 +4,7 @@
 #import libraries
 
 import streamlit as st
-
+import seaborn as sns
 import pandas as pd
 import numpy as np
 
@@ -217,9 +217,9 @@ record_interest = file.groupby('Public Record')['Interest Rate'].agg(['mean']).r
 line_chart = plt.figure(figsize=(6, 4))
 plt.plot(record_interest['Public Record'], record_interest['mean'])
 
-plt.title('Interest rate according to public record', fontweight='bold')
-plt.xlabel('Number of public record', fontweight='bold')
-plt.ylabel('Interest rate', fontweight='bold')
+plt.title('Interest rate according to public record')#, fontweight='bold')
+plt.xlabel('Number of public record')#, fontweight='bold')
+plt.ylabel('Interest rate')#, fontweight='bold')
 
 ################# Bar Chart: interest rate per public record#################
 avg_file = pd.pivot_table(file, values='Interest Rate', index='Public Record', columns='Grade')
@@ -285,6 +285,65 @@ else:
 
     sub_avg_file6.plot.bar(alpha=0.8, ax=bar_ax6, title="Loan amount per public record");
 
+################# Line Chart between Interest rate and Grade #################
+interest_amount=file.groupby('Grade')['Interest Rate'].agg(['mean']).reset_index()
+interest_grade= plt.figure(figsize=(6,4))
+plt.plot(interest_amount['Grade'], interest_amount['mean'])
+plt.title('Interest rate according to Grade')#, fontweight='bold')
+plt.xlabel('Grade')#, fontweight='bold')
+plt.ylabel('Interest rate')#, fontweight='bold')
+plt.show()
+################# Debit to income distribution (in %) #################
+income_distrib = plt.figure(figsize=(6,4))
+sns.distplot(file['Debit to Income'])
+plt.title('Debit to income distribution')#, fontweight='bold')
+plt.xlabel('Debit to income(Debt/Salary/Month)')#, fontweight='bold')
+plt.ylabel('Density')#, fontweight='bold')
+plt.show()
+
+
+#
+# ################# Bar Chart: loan amount per employment type #################
+# amount_type = file.groupby('Employment Duration')['Loan Amount']. mean().reset_index()
+# type_measurements = amount_type.columns.tolist()
+# st.sidebar.markdown("### Bar Chart: loan amount per employment type :  ")
+# #label => table title, options => lists of options to choose from
+# bar_axis = st.sidebar.multiselect(label="loan amount per employment type",
+#                                   options=type_measurements,
+#                                   default=['MORTGAGE','OWN','RENT'])
+# # If chose something
+# if bar_axis:
+#     bar_fig = plt.figure(figsize=(8,5))
+#     bar_ax = bar_fig.add_subplot(111)
+#     sub_amount_type = amount_type[bar_axis]
+#     sub_amount_type.plot.bar(alpha=0.8, ax=bar_ax, title="loan amount per employment type")
+# # default shown
+# else:
+#     bar_fig = plt.figure(figsize=(8,5))
+#     bar_ax = bar_fig.add_subplot(111)
+#     sub_amount_type = amount_type[["Loan Amount","Employment Duration"]]
+#     sub_amount_type.plot.bar(alpha=0.8, ax=bar_ax, title="loan amount per employment type")
+# ################# Bar Chart: Interest rate per employment type #################
+# rate_type = file.groupby('Employment Duration')['Interest Rate']. mean().reset_index()
+# rate_measurements = rate_type.columns.tolist()
+# st.sidebar.markdown("### Bar Chart: Interest rate per employment type :  ")
+# #label => table title, options => lists of options to choose from
+# bar_axis = st.sidebar.multiselect(label="Interest rate per employment type",
+#                                   options=rate_measurements,
+#                                   default=['MORTGAGE','OWN','RENT'])
+# # If chose something
+# if bar_axis:
+#     bar_fig2 = plt.figure(figsize=(8,5))
+#     bar_ax = bar_fig2.add_subplot(111)
+#     sub_rate_type = rate_type[bar_axis]
+#     sub_rate_type.plot.bar(alpha=0.8, ax=bar_ax, title="Interest rate per employment type")
+# # default shown
+# else:
+#     bar_fig2 = plt.figure(figsize=(8,5))
+#     bar_ax = bar_fig2.add_subplot(111)
+#     sub_rate_type = rate_type[["Interest Rate","Employment Duration"]]
+#     sub_amount_type.plot.bar(alpha=0.8, ax=bar_ax, title="loan amount per employment type")
+
 ##################### Layout Application ##################
 
 container1 = st.container()
@@ -323,6 +382,21 @@ with container4:
     with col8:
         bar_fig6
 
+container5 = st.container()
+col9, col10 = st.columns(2)
+with container5:
+    with col9:
+        interest_grade
+    with col10:
+        income_distrib
+
+# container6 = st.container()
+# col11, col12 = st.columns(2)
+# with container6:
+#     with col11:
+#         hist_fig
+#     with col12:
+#         income_distrib
 
 
 
