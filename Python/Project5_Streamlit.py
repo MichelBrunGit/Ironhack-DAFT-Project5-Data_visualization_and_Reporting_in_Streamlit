@@ -13,6 +13,16 @@ import matplotlib.pyplot as plt
 from sklearn import datasets
 
 import warnings
+import streamlit as st
+
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+from sklearn import datasets
+
+import warnings
 warnings.filterwarnings("ignore")
 
 ####### Load Dataset #####################
@@ -34,7 +44,7 @@ st.markdown("## Bank Loan Analysis")   ## Main Title
 
 st.sidebar.markdown("### Scatter Chart: Explore Relationship among Grades :")
 
-measurements = ["Loan Amount","Funded Amount","Funded Amount Investor","Term","Interest Rate","Employment Duration",
+measurements = ["Loan Amount","Funded Amount","Funded Amount Investor","Term","Interest Rate","Employment Duration","Inquires - six months",
                 "Open Account","Public Record","Revolving Balance","Total Accounts","Total Received Interest",
                 "Total Received Late Fee","Recoveries","Collection Recovery Fee","Total Current Balance","Total Revolving Credit Limit"]
 #measurements = breast_cancer_df.drop(labels=["ID","Grade","Sub Grade","Employment Duration", "Verification Status",
@@ -187,6 +197,94 @@ else:
 #                                  #cmap="Greens",
 #                                  ax=hexbin_ax, title="Concentration of Measurements");
 
+################# Hexbin Chart between interest rate & loan amount #################
+hexbin_fig = plt.figure(figsize=(6, 4))
+
+hexbin_ax = hexbin_fig.add_subplot(111)
+
+file.plot.hexbin(x="Interest Rate", y="Loan Amount",
+                 reduce_C_function=np.mean,
+                 gridsize=25,
+                 # cmap="Greens",
+                 ax=hexbin_ax,
+                 title="Concentration of Measurements"
+                 );
+
+################# line chart between line chart & interest rate#################
+
+record_interest = file.groupby('Public Record')['Interest Rate'].agg(['mean']).reset_index()
+
+line_chart = plt.figure(figsize=(6, 4))
+plt.plot(record_interest['Public Record'], record_interest['mean'])
+
+plt.title('Interest rate according to public record', fontweight='bold')
+plt.xlabel('Number of public record', fontweight='bold')
+plt.ylabel('Interest rate', fontweight='bold')
+
+################# Bar Chart: interest rate per public record#################
+avg_file = pd.pivot_table(file, values='Interest Rate', index='Public Record', columns='Grade')
+
+grade_measurements = avg_file.columns.tolist()
+
+st.sidebar.markdown("### Bar Chart: interest rate per public record : ")
+
+# label => table title, options => lists of options to choose from
+bar_axis5 = st.sidebar.multiselect(label="Interest rate per public record",
+                                  options=grade_measurements,
+                                  default=['B', 'C', 'E'])
+
+# If chose something
+if bar_axis5:
+    bar_fig5 = plt.figure(figsize=(6, 4))
+
+    bar_ax5 = bar_fig5.add_subplot(111)
+
+    sub_avg_file5 = avg_file[bar_axis5]
+
+    sub_avg_file5.plot.bar(alpha=0.8, ax=bar_ax5, title="Interest rate per public record")
+
+# default shown
+else:
+    bar_fig5 = plt.figure(figsize=(6, 4))
+
+    bar_ax5 = bar_fig5.add_subplot(111)
+
+    sub_avg_file5 = avg_file[["Interest Rate", "Public Record"]]
+
+    sub_avg_file5.plot.bar(alpha=0.8, ax=bar_ax5, title="Interest rate per public record");
+
+################# Bar Chart: loan amount per public record#################
+amount_avg_file6 = pd.pivot_table(file, values='Funded Amount', index='Public Record', columns='Grade')
+
+grade_measurements6 = amount_avg_file6.columns.tolist()
+
+st.sidebar.markdown("### Bar Chart: loan amount per public record : ")
+
+# label => table title, options => lists of options to choose from
+bar_axis6 = st.sidebar.multiselect(label="funded amount per public record",
+                                  options=grade_measurements,
+                                  default=['A', 'B', 'C', 'F'])
+
+# If chose something
+if bar_axis:
+    bar_fig6 = plt.figure(figsize=(6, 4))
+
+    bar_ax6 = bar_fig6.add_subplot(111)
+
+    sub_avg_file6 = avg_file[bar_axis6]
+
+    sub_avg_file6.plot.bar(alpha=0.8, ax=bar_ax6, title="Loan amount per public record")
+
+# default shown
+else:
+    bar_fig6 = plt.figure(figsize=(6, 4))
+
+    bar_ax6 = bar_fig6.add_subplot(111)
+
+    sub_avg_file6 = avg_file[["Loan Amount", "Public Record"]]
+
+    sub_avg_file6.plot.bar(alpha=0.8, ax=bar_ax6, title="Loan amount per public record");
+
 ##################### Layout Application ##################
 
 container1 = st.container()
@@ -207,6 +305,24 @@ with container2:
     with col4:
         bar_fig3
 
+container3 = st.container()
+col5, col6 = st.columns(2)
+
+with container3:
+    with col5:
+        hexbin_fig
+    with col6:
+        line_chart
+
+container4 = st.container()
+col7, col8 = st.columns(2)
+
+with container4:
+    with col7:
+        bar_fig5
+    with col8:
+        bar_fig6
+
 
 
 
@@ -217,3 +333,4 @@ with container2:
 #         #hist_fig
 #     with col4:
         #hexbin_fig
+
