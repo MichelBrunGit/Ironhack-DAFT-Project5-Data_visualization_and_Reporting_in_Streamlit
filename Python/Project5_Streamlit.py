@@ -7,7 +7,6 @@ import streamlit as st
 import seaborn as sns
 import pandas as pd
 import numpy as np
-
 import matplotlib.pyplot as plt
 
 from sklearn import datasets
@@ -28,7 +27,7 @@ warnings.filterwarnings("ignore")
 ####### Load Dataset #####################
 
 ##Exporting File after encoding
-file = pd.read_csv(r"C:\Users\Michel\git2\Ironhack-DAFT-Project5-Data_visualization_and_Reporting_in_Streamlit\data\bank_loans_clean_with_encoding.csv")
+file = pd.read_csv(r".\bank_loans_clean_with_encoding.csv")
 
 # breast_cancer = datasets.load_breast_cancer(as_frame=True)
 # breast_cancer_df = pd.concat((breast_cancer["data"], breast_cancer["target"]), axis=1)
