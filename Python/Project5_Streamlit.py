@@ -27,7 +27,10 @@ warnings.filterwarnings("ignore")
 ####### Load Dataset #####################
 
 ##Exporting File after encoding
-file = pd.read_csv(r"C:\Users\Michel\git2\Ironhack-DAFT-Project5-Data_visualization_and_Reporting_in_Streamlit\Python\bank_loans_clean_with_encoding.csv")
+from pathlib import Path
+
+file_csv = Path(__file__).parents[1] / 'bank_loans_clean_with_encoding.csv'
+file = pd.read_csv(file_csv)
 
 # breast_cancer = datasets.load_breast_cancer(as_frame=True)
 # breast_cancer_df = pd.concat((breast_cancer["data"], breast_cancer["target"]), axis=1)
