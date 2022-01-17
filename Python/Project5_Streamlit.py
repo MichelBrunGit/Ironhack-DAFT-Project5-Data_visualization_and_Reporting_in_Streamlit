@@ -30,6 +30,14 @@ warnings.filterwarnings("ignore")
 from pathlib import Path
 
 #file_csv = Path(__file__).parents[1] / 'bank_loans_clean_with_encoding.csv'
+
+#To put it online:
+#anaconda prompt : pipreqs C:\Users\Michel\git2\Ironhack-DAFT-Project5-Data_visualization_and_Reporting_in_Streamlit\Python
+#requirement.txt file to be put on github (add, commit and push)
+#transform local path to online path
+#local path
+#file = pd.read_csv(r"C:\Users\Michel\git2\Ironhack-DAFT-Project5-Data_visualization_and_Reporting_in_Streamlit\Python\bank_loans_clean_with_encoding.csv")
+#online path
 file = pd.read_csv(r"/app/ironhack-daft-project5-data_visualization_and_reporting_in_streamlit/Python/bank_loans_clean_with_encoding.csv")
 
 # breast_cancer = datasets.load_breast_cancer(as_frame=True)
